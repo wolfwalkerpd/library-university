@@ -1,12 +1,13 @@
 import config from "@/lib/config";
 import ImageKit from "imagekit"
+import { NextResponse } from "next/server";
 
 const {env: {imageKit: {publicKey, privateKey, urlEndpoint}}} = config;
 
 const imagekit = new ImageKit({
-    publicKey: publicKey,
-    privateKey: privateKey,
-    urlEndpoint: urlEndpoint,
+    publicKey,
+    privateKey,
+    urlEndpoint,
 });
 
 export async function GET(){

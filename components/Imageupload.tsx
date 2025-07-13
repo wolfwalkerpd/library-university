@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { ImageKitProvider } from "@imagekit/next";
+import { ImageKitProvider } from "imagekitio-next";
 import { IKImage, IKUpload } from "imagekitio-next";
 import config from "@/lib/config";
 import ImageKit from "imagekit";
-
+import { toast } from "sonner";
 const {
   env: {
     imageKit: { publicKey, urlEndpoint },
@@ -14,7 +14,7 @@ const {
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imageKit`);
+    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -27,18 +27,35 @@ const authenticator = async () => {
     const data = await response.json();
     const { signature, expire, token } = data;
 
-    return { signature, expire, token };
+    return { token, expire, signature };
   } catch (error: any) {
     throw new Error(`authentication request failed: ${error.message}`);
   }
 };
 
-const Imageupload = () => {
+const Imageupload = ({
+  onFileChange,
+}: {
+  onFileChange: (filePath: string) => void;
+}) => {
   const ikUploadRef = useRef(null);
   const [file, setFile] = useState<{ filePath: string } | null>(null);
 
-  const onError = () => {};
-  const onSuccess = () => {};
+  const onError = (error: any) => {
+    console.log(error);
+
+    toast("Image upload failed", {
+      description: "Your image could not be uploaded, please try again",
+      variant: "destructive",
+    });
+  };
+  const onSuccess = (res: any) => {
+    setFile(res);
+    onFileChange(res.filePath);
+    toast("Image uploaded successfully", {
+      description: `${res.filePath} Uploaded successfully`,
+    });
+  };
   return (
     <ImageKitProvider
       publicKey={publicKey}
@@ -52,14 +69,16 @@ const Imageupload = () => {
         fileName="test-upload.png"
       />
 
-      <button className="upload-btn" onClick={(e) =>{
-        e.preventDefault();
+      <button
+        className="upload-btn"
+        onClick={(e) => {
+          e.preventDefault();
 
-        if(ikUploadRef.current){
-          // @ts.ignore
-          ikUploadRef.current?.click();
-        }
-      }}>
+          if (ikUploadRef.current) {
+            // @ts.ignore
+            ikUploadRef.current?.click();
+          }
+        }}>
         <Image
           src="/icons/upload.svg"
           alt="upload-icon"
@@ -77,8 +96,9 @@ const Imageupload = () => {
         <IKImage
           alt={file.filePath}
           path={file.filePath}
-          width={500}
-          height={500}
+          // src={file.url}
+          width={500} 
+          height={300}
         />
       )}
     </ImageKitProvider>
