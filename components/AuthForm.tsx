@@ -24,6 +24,8 @@ import {
 } from "react-hook-form";
 import { z, ZodType } from "zod";
 import Imageupload from "./Imageupload";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
@@ -36,6 +38,7 @@ const AuthForm = <T extends FieldValues>({
   defaultValues,
   onSubmit,
 }: Props<T>) => {
+  const router = useRouter();
   const isSignIn = type === "SIGN_IN";
 
   const form: UseFormReturn<T> = useForm({
@@ -44,11 +47,29 @@ const AuthForm = <T extends FieldValues>({
   });
 
   // 2. Define a submit handler.
-  const handleSubmit: SubmitHandler<T> = async (data) => {};
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    const result = await onSubmit(data);
+    console.log(result)
+    if (result.success) {
+      console.log("success");
+      toast("success",{
+        description: isSignIn
+          ? "You Have Successfully Signed In."
+          : "You Have Successfully Signed Up",
+      });
+
+      router.push('/')
+    }else{
+      toast(`Error ${isSignIn ? "signing in" : "signing up"}`,{
+        description: result.error ?? 'An error occurred',
+        variant: "destructive",
+      })
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold text-white">
+      <h1 className="text-2xl font-semibold text-white">  
         {isSignIn ? "Welcome back to BookWise" : "Create your library account"}
       </h1>
       <p className="text-light-100 ">
@@ -73,7 +94,7 @@ const AuthForm = <T extends FieldValues>({
                   <FormControl>
                     {field.name === "universityCard" ? (
                       <Imageupload onFileChange={field.onChange} />
-                    ) : (
+                    ) : ( 
                       <Input
                         required
                         type={

@@ -95,8 +95,7 @@ const Imageupload = ({
       {file && (
         <IKImage
           alt={file.filePath}
-          path={file.filePath}
-          // src={file.url}
+          src={file.url}
           width={500} 
           height={300}
         />
