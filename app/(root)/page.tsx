@@ -8,9 +8,6 @@ import { users } from "@/database/schema";
 import { redirect } from "next/navigation";
 
 const Home = async() => {
-  const session = await auth();
-  
-    if (!session) redirect('/sign-in');
   const result = await db.select().from(users);
   console.log(JSON.stringify(result, null, 2))
   return (
