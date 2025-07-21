@@ -62,6 +62,7 @@ const AuthForm = <T extends FieldValues>({
     }else{
       toast(`Error ${isSignIn ? "signing in" : "signing up"}`,{
         description: result.error ?? 'An error occurred',
+            // @ts-ignore
         variant: "destructive",
       })
     }

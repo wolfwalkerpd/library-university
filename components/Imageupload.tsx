@@ -40,17 +40,20 @@ const Imageupload = ({
 }) => {
   const ikUploadRef = useRef(null);
   const [file, setFile] = useState<{ filePath: string } | null>(null);
+  const [url, setUrl] = useState<{ url: string } | null>(null);
 
   const onError = (error: any) => {
     console.log(error);
 
     toast("Image upload failed", {
+            // @ts-ignore
+      variant:'destructive',
       description: "Your image could not be uploaded, please try again",
-      variant: "destructive",
     });
   };
   const onSuccess = (res: any) => {
     setFile(res);
+    setUrl(res);
     onFileChange(res.filePath);
     toast("Image uploaded successfully", {
       description: `${res.filePath} Uploaded successfully`,
@@ -75,7 +78,7 @@ const Imageupload = ({
           e.preventDefault();
 
           if (ikUploadRef.current) {
-            // @ts.ignore
+            // @ts-ignore
             ikUploadRef.current?.click();
           }
         }}>
@@ -95,7 +98,7 @@ const Imageupload = ({
       {file && (
         <IKImage
           alt={file.filePath}
-          src={file.url}
+          src={url?.url}
           width={500} 
           height={300}
         />
