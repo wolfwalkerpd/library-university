@@ -57,7 +57,7 @@ export const signUp = async (params: AuthCredentials) => {
     return { success: false, error: "User Already Exist" };
   }
 
-  const hashedPassword = await hash(password, 10);
+  const hashedPassword = await hash(password, 10); 
 
   try {
     await db.insert(users).values({

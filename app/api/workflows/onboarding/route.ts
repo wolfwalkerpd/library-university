@@ -1,6 +1,5 @@
 import { serve } from "@upstash/workflow/nextjs";
 
-
 type InitialData = {
   email: string;
 };
