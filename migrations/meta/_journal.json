@@ -8,6 +8,13 @@
       "when": 1752645887887,
       "tag": "0000_magical_eternity",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753566895966,
+      "tag": "0001_fantastic_tinkerer",
+      "breakpoints": true
     }
   ]
 }

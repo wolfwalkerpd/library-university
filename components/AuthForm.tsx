@@ -23,9 +23,10 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import { z, ZodType } from "zod";
-import Imageupload from "./Imageupload";
+import Imageupload from "./Fileupload";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import FileUpload from "./Fileupload";
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
@@ -49,28 +50,28 @@ const AuthForm = <T extends FieldValues>({
   // 2. Define a submit handler.
   const handleSubmit: SubmitHandler<T> = async (data) => {
     const result = await onSubmit(data);
-    console.log(result)
+    console.log(result);
     if (result.success) {
       console.log("success");
-      toast("success",{
+      toast("success", {
         description: isSignIn
           ? "You Have Successfully Signed In."
           : "You Have Successfully Signed Up",
       });
 
-      router.push('/')
-    }else{
-      toast(`Error ${isSignIn ? "signing in" : "signing up"}`,{
-        description: result.error ?? 'An error occurred',
-            // @ts-ignore
+      router.push("/");
+    } else {
+      toast(`Error ${isSignIn ? "signing in" : "signing up"}`, {
+        description: result.error ?? "An error occurred",
+        // @ts-ignore
         variant: "destructive",
-      })
+      });
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold text-white">  
+      <h1 className="text-2xl font-semibold text-white">
         {isSignIn ? "Welcome back to BookWise" : "Create your library account"}
       </h1>
       <p className="text-light-100 ">
@@ -94,8 +95,15 @@ const AuthForm = <T extends FieldValues>({
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
-                      <Imageupload onFileChange={field.onChange} />
-                    ) : ( 
+                      <FileUpload
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your ID"
+                        folder="ids"
+                        variant="dark"
+                        onFileChange={field.onChange}
+                      />
+                    ) : (
                       <Input
                         required
                         type={
