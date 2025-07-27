@@ -9,6 +9,7 @@ import {
   date,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { headers } from "next/headers";
 
 export const STATUS_ENUM = pgEnum("status", [
   "PENDING",
@@ -51,3 +52,4 @@ export const books = pgTable("books", {
   summary: varchar("summary").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
+

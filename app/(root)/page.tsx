@@ -15,6 +15,9 @@ const Home = async () => {
     .from(books)
     .limit(10)
     .orderBy(desc(books.createdAt))) as Book[];
+
+    console.log(latestBooks)
+
   return (
     <>
       <BookOverview {...latestBooks[0]} userId={session?.user?.id as string} />
