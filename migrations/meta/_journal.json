@@ -15,6 +15,13 @@
       "when": 1753566895966,
       "tag": "0001_fantastic_tinkerer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753645712804,
+      "tag": "0002_fearless_vision",
+      "breakpoints": true
     }
   ]
 }
